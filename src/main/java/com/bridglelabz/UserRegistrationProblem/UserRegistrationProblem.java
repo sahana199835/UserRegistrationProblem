@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 public class UserRegistrationProblem {
 
 	public static void main(String[] args) {
-		String regex = "^.{8,}$";
 		String regex = "^(?=.*[A-Z]).{8,}$";
+		String regex = "^(?=.*[A-Z])(?=.*[0-9]).{8,}$";
 
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter A Password: ");
 		System.out.println("Enter a password having atleast one uppercase : ");
+		System.out.println("Enter a password having atleast one uppercase & one number : ");
 		String password = sc.nextLine();
 
 		Pattern pattern = Pattern.compile(regex);
@@ -24,7 +24,6 @@ public class UserRegistrationProblem {
 		} else {
 			System.out.println("Invalid Password");
 		}
-
 	}
-}
-}
+
+		}
