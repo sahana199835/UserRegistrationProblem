@@ -8,68 +8,96 @@ public class UserRegistrationProblem {
 
 	public static void main(String[] args) {
 		
-		String regex = "^[a-zA-Z0-9]+([-\\+._][a-zA-Z0-9]+)*@[a-zA-Z0-9]+(\\.[a-zA-Z]{2,}){1,2}$";
+		private String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+		private Pattern pattern = Pattern.compile(regex);
+		public static void main(String[] args) {
+			Scanner scanner = new Scanner(System.in);
 
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Email Address: ");
-		String data = sc.nextLine();
-	public static boolean isvalidfirstName(String firstName) {
-		String regex = "^[A-Z][A-Za-z]{3,}";
-		Pattern pattern = Pattern.compile(regex);
-		if (firstName == null) {
-			return false;
+		public void validateFirstName(String firstName) throws InvalidFirstNameException {
+			if (firstName.isEmpty()) {
+				throw new InvalidFirstNameException("Invalid first name");
+			}
 		}
-		Matcher matcher = pattern.matcher(firstName);
-		return matcher.matches();
+			String firstName = getUserInput(scanner, "Enter first name: ", s -> s.matches("[A-Za-z]+"),
+					"Invalid first name!");
+
+		public void validateLastName(String lastName) throws InvalidLastNameException {
+			if (lastName.isEmpty()) {
+				throw new InvalidLastNameException("Invalid last name");
+			}
+		}
+			String lastName = getUserInput(scanner, "Enter last name: ", s -> s.matches("[A-Za-z]+"), "Invalid last name!");
+
+		public void validateEmail(String email) throws InvalidEmailException {
+			Matcher matcher = pattern.matcher(email);
+			if (!matcher.matches()) {
+				throw new InvalidEmailException("Invalid email");
+			}
+		}
+			String email = getUserInput(scanner, "Enter email: ",
+					s -> s.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}"), "Invalid email!");
+
+		public void validateMobile(String mobile) throws InvalidMobileException {
+			if (mobile.length() != 10) {
+				throw new InvalidMobileException("Invalid mobile");
+			}
+		}
+			String mobile = getUserInput(scanner, "Enter mobile number: ", s -> s.matches("\\d{10}"),
+					"Invalid mobile number!");
+
+		public void validatePassword(String password) throws InvalidPasswordException {
+			if (password.length() < 8) {
+				throw new InvalidPasswordException("Invalid password");
+			}
+		}
+	}
+			String password = getUserInput(scanner, "Enter password: ",
+					s -> s.matches("^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).{8,}$"), "Invalid password!");
+
+	class InvalidFirstNameException extends Exception {
+		public InvalidFirstNameException(String message) {
+			super(message);
+			System.out.println("First name: " + firstName);
+			System.out.println("Last name: " + lastName);
+			System.out.println("Email: " + email);
+			System.out.println("Mobile number: " + mobile);
+			System.out.println("Password: " + password);
+		}
 	}
 
-	public static boolean isvalidlastName(String lastName) {
-		String regex = "^[A-Z][A-Za-z]{3,}";
-		Pattern pattern = Pattern.compile(regex);
-		if (lastName == null) {
-			return false;
+	class InvalidLastNameException extends Exception {
+		public InvalidLastNameException(String message) {
+			super(message);
+		private static String getUserInput(Scanner scanner, String prompt, Predicate<String> validator, String errorMsg) {
+			String input;
+			boolean valid;
+			do {
+				System.out.print(prompt);
+				input = scanner.nextLine();
+				valid = validator.test(input);
+				if (!valid) {
+					System.out.println(errorMsg);
+				}
+			} while (!valid);
+			return input;
 		}
-		Matcher matcher = pattern.matcher(lastName);
-		return matcher.matches();
 	}
 
-	public static boolean isvalidEmail(String Email) {
-		String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(data);
-		boolean result = matcher.matches();
-		if (Email == null) {
-			return false;
+	class InvalidEmailException extends Exception {
+		public InvalidEmailException(String message) {
+			super(message);
 		}
-		Matcher matcher = pattern.matcher(Email);
-		return matcher.matches();
-
 	}
 
-		if (result) {
-			System.out.println("Valid Email");
-		} else {
-			System.out.println("Invalid Email");
-	public static boolean isvalidMobileNumber(String mobileNumber) {
-		String regex = "^[1-9][0-9]\\s[1-9][0-9]{9}";
-		Pattern pattern = Pattern.compile(regex);
-		if (mobileNumber == null) {
-			return false;
+	class InvalidMobileException extends Exception {
+		public InvalidMobileException(String message) {
+			super(message);
 		}
-		Matcher matcher = pattern.matcher(mobileNumber);
-		return matcher.matches();
-
 	}
-}
 
-	public static boolean isvalidPassword(String password) {
-		String regex = "^.{8,}$";
-		Pattern pattern = Pattern.compile(regex);
-		if (password == null) {
-			return false;
+	class InvalidPasswordException extends Exception {
+		public InvalidPasswordException(String message) {
+			super(message);
 		}
-		Matcher matcher = pattern.matcher(password);
-		return matcher.matches();
 	}
-}
- 
+	   
